@@ -92,12 +92,21 @@ std::string GetTownsInfoFromCountry(const std::vector<town_info>& towns,
   return answer;
 }
 
+std::string GenerateFilename(const std::string& base) {
+  size_t index = 0;
+  std::fstream file(base + std::to_string(index) + ".txt");
+
+  while(file.is_open()) {
+    file.close();
+    ++index;
+    file.open(base + std::to_string(index) + ".txt");
+  }
+
+  return base + std::to_string(index) + ".txt";
+}
 void Menu() {
   auto towns = extract_towns(path_to_towns);
   auto countries = extract_countries(path_to_counties);
-
-  size_t townNameCounter = 0, townCountryCounter = 0, townAmountCounter = 0,
-  countryNameCounter = 0, countryCapitalCounter = 0, countryContinentCounter = 0;
   std::cout << "Добро пожаловать в программу сортировки информации!" << std::endl;
   while (true) {
     std::cout << "По какому полю хотите сортировать?" << std::endl;
@@ -140,8 +149,8 @@ void Menu() {
 
 
     if (field == '1') {
-      ++townNameCounter;
-      std::ofstream out ("SortByTownName" + std::to_string(countryNameCounter) + ".txt");
+      auto name = GenerateFilename("SortByTownName");
+      std::ofstream out (name);
       out << "Сортировка по названию города" << std::endl;
       // Сортировка по названию
       if (lambda == '1') {
@@ -167,8 +176,8 @@ void Menu() {
       out.close();
 
     } else if (field == '2') {
-      ++townCountryCounter;
-      std::ofstream out ("SortByTownCountry" + std::to_string(countryNameCounter) + ".txt" + std::to_string(townCountryCounter));
+      auto name = GenerateFilename("SortByTownCountry");
+      std::ofstream out (name);
       out << "Сортировка по названию страны" << std::endl;
       // Сортировка по стране
       if (lambda == '1') {
@@ -192,8 +201,8 @@ void Menu() {
       out.close();
 
     } else if (field == '3') {
-      ++townAmountCounter;
-      std::ofstream out ("SortByTownAmount" + std::to_string(countryNameCounter) + ".txt" + std::to_string(townAmountCounter));
+      auto name = GenerateFilename("SortByTownAmount");
+      std::ofstream out (name);
       out << "Сортировка по численности населения города" << std::endl;
       // Сортировка по численности
       if (lambda == '1') {
@@ -216,8 +225,8 @@ void Menu() {
       out.close();
 
     } else if (field == '4') {
-      ++countryNameCounter;
-      std::ofstream out ("SortByCountryName" + std::to_string(countryNameCounter) + ".txt" + std::to_string(countryNameCounter));
+      auto name = GenerateFilename("SortByCountryName");
+      std::ofstream out (name);
       // Сортировка по названию
       if (lambda == '1') {
         Sort(countries, [](const country_info& t1, const country_info& t2) {
@@ -240,8 +249,8 @@ void Menu() {
       out.close();
 
     } else if (field == '5') {
-      ++countryCapitalCounter;
-      std::ofstream out ("SortByCountryCapital" + std::to_string(countryNameCounter) + ".txt" + std::to_string(countryCapitalCounter));
+      auto name = GenerateFilename("SortByCountryCapital");
+      std::ofstream out (name);
       // Сортировка по названию столицы
       if (lambda == '1') {
         Sort(countries, [](const country_info& t1, const country_info& t2) {
@@ -264,8 +273,8 @@ void Menu() {
       out.close();
 
     } else if (field == '6') {
-      ++countryContinentCounter;
-      std::ofstream out ("SortByCountryContinent" + std::to_string(countryNameCounter) + ".txt" + std::to_string(countryContinentCounter));
+      auto name = GenerateFilename("SortByCountryContinent");
+      std::ofstream out (name);
       // Сортировка по названию континента
       if (lambda == '1') {
         Sort(countries, [](const country_info& t1, const country_info& t2) {
